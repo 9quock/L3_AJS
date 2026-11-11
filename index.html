@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>JS</title>
+</head>
+<script>
+
+const xhrPosts = new XMLHttpRequest();
+xhrPosts.open('GET', 'https://jsonplaceholder.typicode.com/posts');
+xhrPosts.onload = function() {
+  const json = JSON.parse(xhrPosts.responseText);
+  console.log("Posts (коллбэк)", json.sort((a, b) => b.title.length - a.title.length));
+};
+xhrPosts.send();
+
+const xhrComments = new XMLHttpRequest();
+xhrComments.open('GET', 'https://jsonplaceholder.typicode.com/comments');
+xhrComments.onload = function() {
+  const json = JSON.parse(xhrComments.responseText);
+  console.log("Comments (коллбэк)", json.sort((a, b) => b.name.length - a.name.length));
+};
+xhrComments.send();
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+fetch('https://jsonplaceholder.typicode.com/users')
+  .then(response => response.json())
+  .then(json => console.log("Users (промис)", json.map( v => ({ id: v.id, name: v.name, username: v.username, email: v.email, phone: v.phone }) )))
+
+fetch('https://jsonplaceholder.typicode.com/todos')
+  .then(response => response.json())
+  .then(json => console.log("Todos (промис)", json.filter( v => v.completed )))
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+async function fetchPosts() {
+  let posts = await fetch('https://jsonplaceholder.typicode.com/posts')
+  let posts_json = await posts.json()
+  let posts_data = posts_json.sort( (a, b) => b.title.length - a.title.length )
+  console.log("Posts (async)", posts_data)
+}
+
+async function fetchComments() {
+  let comments = await fetch('https://jsonplaceholder.typicode.com/comments')
+  let comments_json = await comments.json()
+  let comments_data = comments_json.sort( (a, b) => b.name.length - a.name.length )
+  console.log("Comments (async)", comments_data)
+}
+
+async function fetchUsers() {
+  let users = await fetch('https://jsonplaceholder.typicode.com/users')
+  let users_json = await users.json()
+  let users_data = users_json.map( v => ({ id: v.id, name: v.name, username: v.username, email: v.email, phone: v.phone }) )
+  console.log("Users (async)", users_data)
+}
+
+async function fetchTodos() {
+  let todos = await fetch('https://jsonplaceholder.typicode.com/todos')
+  let todos_json = await todos.json()
+  let todos_data = todos_json.filter( v => v.completed )
+  console.log("Todos (async)", todos_data)
+}
+
+fetchPosts()
+fetchComments()
+fetchUsers()
+fetchTodos()
+
+</script>
+</html>
